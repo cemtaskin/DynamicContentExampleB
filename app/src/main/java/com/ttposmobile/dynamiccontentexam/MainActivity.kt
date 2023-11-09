@@ -5,15 +5,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.ttposmobile.dynamiccontentexam.ui.theme.DynamicContentExamTheme
 
+
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -23,18 +28,41 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                   
+                   MainScreen()
+
                 }
             }
         }
     }
 }
 
+
 @Composable
-fun GreetingList (names: List<String>){
+fun MainScreen (){
+    var namesState =  remember{ mutableStateListOf<String>("Ali Duru","Aliye Duru","DENEME")}
+
     Column() {
-        for(name in names){
+    GreetingList(namesState,{
+        namesState.add("Yeni Kişi")
+    })
+        NamesCount(nameList = namesState)
+    }
+}
+
+@Composable
+fun NamesCount (nameList: List<String>){
+    Text(nameList.size.toString())
+}
+@Composable
+fun GreetingList (nameList : List<String>,buttonClick : ()->Unit){
+
+    Column() {
+        for(name in nameList){
             Greeting(name = name)
+        }
+
+        Button(onClick = buttonClick) {
+            Text("Yeni Kişi")
         }
     }
 }
@@ -48,6 +76,6 @@ fun Greeting(name : String){
 @Composable
 fun GreetingPreview() {
     DynamicContentExamTheme {
-        GreetingList(names = listOf("Ali Duru","Aliye Duru","DENEME"))
+
     }
 }
